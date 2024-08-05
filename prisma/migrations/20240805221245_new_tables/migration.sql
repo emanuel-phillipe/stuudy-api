@@ -1,0 +1,6 @@
+-- AlterTable
+ALTER TABLE "activities" ADD COLUMN     "date" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP;
+
+-- AlterTable
+ALTER TABLE "subjects" ADD COLUMN     "grade" DOUBLE PRECISION,
+ADD COLUMN     "total" INTEGER;

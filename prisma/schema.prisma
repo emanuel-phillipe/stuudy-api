@@ -29,6 +29,9 @@ model Subject {
   user       User?      @relation(fields: [user_id], references: [id])
   user_id    String?
   name       String
+  grade      Float?
+  components String[]   @default([""])
+  total      Int?
   slug       String     @unique
   activities Activity[]
 
@@ -38,8 +41,9 @@ model Subject {
 model Activity {
   id         String   @id @default(cuid())
   name       String
-  grade      Float
+  grade      Float?
   total      Int
+  date       DateTime @default(now()) @db.Date
   subject    Subject? @relation(fields: [subject_id], references: [id])
   subject_id String?
 

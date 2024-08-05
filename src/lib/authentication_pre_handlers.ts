@@ -1,5 +1,7 @@
 import { FastifyReply, FastifyRequest, HookHandlerDoneFunction } from "fastify";
 import jwt from "jsonwebtoken"
+import { prisma } from "./prisma";
+import type { User } from "@prisma/client";
 
 interface IJwtPayload {
   id: string
@@ -7,7 +9,7 @@ interface IJwtPayload {
 
 declare module 'fastify' {
   interface FastifyRequest {
-    user_id: string
+    user: User
   }
 }
 
@@ -26,7 +28,10 @@ export async function handleAuthorization(request:FastifyRequest, reply:FastifyR
   const userInfo = await decodeJwtToken(jwtToken)
   if(!userInfo) return reply.status(401).send({"message": "Session unauthorized"})
 
-  request.user_id = userInfo;
+  await prisma.user.findFirst({where: {id: userInfo}}).then((user) => {
+    if(!user) return reply.status(401).send({"message": "Session unauthorized"})
+    request.user = user
+  })
 
   done()
 }
