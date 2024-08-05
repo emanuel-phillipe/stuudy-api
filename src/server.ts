@@ -1,8 +1,13 @@
 import fastify from "fastify"
 import userRoutes from "./routes/user_routes";
 import authenticationRoutes from "./routes/authentication_routes";
+import cors from '@fastify/cors'
 
 const app = fastify()
+
+app.register(cors, {
+  origin: "*",
+})
 
 app.register(userRoutes, {prefix: "/user"})
 app.register(authenticationRoutes, {prefix: "/auth"})
